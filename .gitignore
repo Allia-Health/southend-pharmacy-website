@@ -1,0 +1,66 @@
+# Terraform
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/terraform.tfvars
+**/.terraform.tfstate.lock.info
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+**/.terraformrc
+**/terraform.rc
+**/crash.log
+**/crash.*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+*.gz
+
+# Backups
+*.bak
+*.backup
+*.sql
+
+# WordPress
+wp-config.php.bak
+.htaccess.bak
+debug.log
+*.zip
+*.tar.gz
+*.rar
+
+# Large media files (store in Cloud Storage instead)
+*.gif
+*.mp4
+*.mov
+*.avi
+
+# Secrets
+secrets/
+*.pem
+*.key
+*.crt
+
+# Build artifacts
+dist/
+build/
+
