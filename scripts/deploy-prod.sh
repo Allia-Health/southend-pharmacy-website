@@ -13,7 +13,7 @@ if [ "$confirm" != "yes" ]; then
 fi
 
 # Configuration
-PROJECT_ID="southend-prod-pharmacy"
+PROJECT_ID="allia-sp-prod"
 REGION="us-central1"
 ENV_DIR="environments/prod"
 
@@ -24,12 +24,11 @@ cd "$(dirname "$0")/.."
 echo "📦 Setting active GCP project..."
 gcloud config set project ${PROJECT_ID}
 
-# Build and push Docker image (if using custom image)
-echo "🐳 Building Docker image..."
-cd wordpress
-docker build -t gcr.io/${PROJECT_ID}/wordpress:latest .
-docker push gcr.io/${PROJECT_ID}/wordpress:latest
-cd ..
+# Build and push Docker image using Cloud Build
+echo "🐳 Building Docker image with Cloud Build..."
+gcloud builds submit wordpress \
+  --tag us-central1-docker.pkg.dev/${PROJECT_ID}/wordpress/wordpress:latest \
+  --project=${PROJECT_ID}
 
 # Deploy with Terraform
 echo "🏗️  Deploying infrastructure with Terraform..."
@@ -39,7 +38,9 @@ cd ${ENV_DIR}
 terraform init
 
 # Plan
-terraform plan -out=tfplan
+terraform plan \
+  -var="wordpress_image=us-central1-docker.pkg.dev/${PROJECT_ID}/wordpress/wordpress:latest" \
+  -out=tfplan
 
 echo ""
 echo "⚠️  Please review the plan above carefully!"

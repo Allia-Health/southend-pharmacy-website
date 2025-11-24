@@ -5,7 +5,7 @@
 variable "project_id" {
   description = "Project id, references existing project if `project_create` is null."
   type        = string
-  default     = "southend-prod-pharmacy"
+  default     = "allia-sp-prod"
 }
 
 variable "region" {

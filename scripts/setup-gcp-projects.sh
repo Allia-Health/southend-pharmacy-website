@@ -26,17 +26,17 @@ echo ""
 echo "📦 Creating GCP projects..."
 
 echo "Creating Development project..."
-gcloud projects create southend-dev-pharmacy \
+gcloud projects create allia-sp-dev \
     --organization=${ORG_ID} \
     --name="Southend Pharmacy Dev" || echo "Project already exists"
 
-echo "Creating Test project..."
-gcloud projects create southend-test-pharmacy \
+echo "Creating Staging project..."
+gcloud projects create allia-sp-staging \
     --organization=${ORG_ID} \
-    --name="Southend Pharmacy Test" || echo "Project already exists"
+    --name="Southend Pharmacy Staging" || echo "Project already exists"
 
 echo "Creating Production project..."
-gcloud projects create southend-prod-pharmacy \
+gcloud projects create allia-sp-prod \
     --organization=${ORG_ID} \
     --name="Southend Pharmacy Prod" || echo "Project already exists"
 
@@ -44,20 +44,20 @@ gcloud projects create southend-prod-pharmacy \
 echo ""
 echo "💳 Linking billing accounts..."
 
-gcloud billing projects link southend-dev-pharmacy \
+gcloud billing projects link allia-sp-dev \
     --billing-account=${BILLING_ACCOUNT_ID}
 
-gcloud billing projects link southend-test-pharmacy \
+gcloud billing projects link allia-sp-staging \
     --billing-account=${BILLING_ACCOUNT_ID}
 
-gcloud billing projects link southend-prod-pharmacy \
+gcloud billing projects link allia-sp-prod \
     --billing-account=${BILLING_ACCOUNT_ID}
 
 # Enable required APIs for all projects
 echo ""
 echo "🔌 Enabling required APIs..."
 
-for project in southend-dev-pharmacy southend-test-pharmacy southend-prod-pharmacy; do
+for project in allia-sp-dev allia-sp-staging allia-sp-prod; do
     echo "Enabling APIs for ${project}..."
     gcloud services enable \
         run.googleapis.com \
@@ -77,9 +77,9 @@ echo ""
 echo "✅ GCP projects setup complete!"
 echo ""
 echo "Projects created:"
-echo "  - southend-dev-pharmacy"
-echo "  - southend-test-pharmacy"
-echo "  - southend-prod-pharmacy"
+echo "  - allia-sp-dev"
+echo "  - allia-sp-staging"
+echo "  - allia-sp-prod"
 echo ""
 echo "Next steps:"
 echo "  1. Review the terraform configurations in environments/"

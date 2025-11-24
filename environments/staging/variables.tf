@@ -5,7 +5,7 @@
 variable "project_id" {
   description = "Project id, references existing project if `project_create` is null."
   type        = string
-  default     = "southend-test-pharmacy"
+  default     = "allia-sp-staging"
 }
 
 variable "region" {
@@ -56,7 +56,7 @@ variable "ip_ranges" {
 variable "prefix" {
   description = "Unique prefix used for resource names. Not used for project if 'project_create' is null."
   type        = string
-  default     = "sp-test"
+  default     = "sp-staging"
 }
 
 variable "principals" {

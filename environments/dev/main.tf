@@ -122,11 +122,15 @@ module "cloudsql" {
   tier                    = local.cloudsql_conf.tier
   databases               = [local.cloudsql_conf.db]
   gcp_deletion_protection = false
-  users = {
-    "${local.cloudsql_conf.user}" = {
-      password = var.cloudsql_password == null ? random_password.cloudsql_password.result : var.cloudsql_password
-    }
-  }
+  users                   = {}
+}
+
+# Create CloudSQL user manually to avoid sensitive value in for_each
+resource "google_sql_user" "wordpress_user" {
+  project  = module.project.project_id
+  name     = local.cloudsql_conf.user
+  instance = module.cloudsql.name
+  password = random_password.cloudsql_password.result
 }
 
 # Create Cloud Storage bucket for WordPress uploads
@@ -165,11 +169,15 @@ module "cloud_run" {
         "WORDPRESS_DB_HOST"     = module.cloudsql.ip
         "WORDPRESS_DB_NAME"     = local.cloudsql_conf.db
         "WORDPRESS_DB_USER"     = local.cloudsql_conf.user
-        "WORDPRESS_DB_PASSWORD" = var.cloudsql_password == null ? random_password.cloudsql_password.result : var.cloudsql_password
-        "WORDPRESS_CONFIG_EXTRA" = <<-EOT
-          define('WP_HOME', 'https://dev.southendpharmacystore.com');
-          define('WP_SITEURL', 'https://dev.southendpharmacystore.com');
-        EOT
+        "WORDPRESS_DB_PASSWORD" = random_password.cloudsql_password.result
+        # SMTP Configuration for email delivery
+        "SMTP_HOST"             = var.smtp_host
+        "SMTP_PORT"             = tostring(var.smtp_port)
+        "SMTP_USER"             = var.smtp_user
+        "SMTP_PASSWORD"         = var.smtp_password
+        "SMTP_FROM"             = var.smtp_from
+        "SMTP_FROM_NAME"        = var.smtp_from_name
+        "SMTP_SECURE"            = var.smtp_secure
       }
     }
   }
@@ -186,8 +194,8 @@ module "cloud_run" {
     # Connect to CloudSQL
     cloudsql_instances  = [module.cloudsql.connection_name]
     vpcaccess_connector = local.connector
-    # Allow all traffic
-    vpcaccess_egress = "all-traffic"
+    # Route only private traffic through VPC, allow internet access for WordPress.org
+    vpcaccess_egress = "private-ranges-only"
   }
   ingress_settings = "all"
 }

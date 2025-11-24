@@ -20,7 +20,7 @@ This repository contains the infrastructure as code (IaC) for deploying the Sout
 southend-pharmacy-website/
 ├── environments/
 │   ├── dev/          # Development environment
-│   ├── test/         # Test environment
+│   ├── staging/      # Staging environment
 │   └── prod/         # Production environment
 ├── wordpress/        # WordPress custom theme and Dockerfile
 │   ├── Dockerfile
@@ -34,9 +34,9 @@ southend-pharmacy-website/
 
 ## GCP Projects
 
-- **Development**: `southend-dev-pharmacy`
-- **Test**: `southend-test-pharmacy`
-- **Production**: `southend-prod-pharmacy`
+- **Development**: `allia-sp-dev`
+- **Staging**: `allia-sp-staging`
+- **Production**: `allia-sp-prod`
 
 ## Prerequisites
 
@@ -57,9 +57,9 @@ cd /Users/sbeuran/Documents/Work/Allia-Health/Repositories/southend-pharmacy-web
 ### 2. Link Billing Accounts
 
 Via GCP Console:
-- Dev: https://console.cloud.google.com/billing/linkedaccount?project=southend-dev-pharmacy
-- Test: https://console.cloud.google.com/billing/linkedaccount?project=southend-test-pharmacy
-- Prod: https://console.cloud.google.com/billing/linkedaccount?project=southend-prod-pharmacy
+- Dev: https://console.cloud.google.com/billing/linkedaccount?project=allia-sp-dev
+- Staging: https://console.cloud.google.com/billing/linkedaccount?project=allia-sp-staging
+- Prod: https://console.cloud.google.com/billing/linkedaccount?project=allia-sp-prod
 
 ### 3. Deploy to Development
 
@@ -103,10 +103,10 @@ The `southend-pharmacy-theme` includes:
 ./scripts/deploy-dev.sh
 ```
 
-### Test Environment
+### Staging Environment
 
 ```bash
-./scripts/deploy-test.sh
+./scripts/deploy-staging.sh
 ```
 
 ### Production Environment
@@ -120,7 +120,7 @@ The `southend-pharmacy-theme` includes:
 After deployment, update DNS records to point to Cloud Run:
 
 - **Dev**: `dev.southendpharmacystore.com`
-- **Test**: `test.southendpharmacystore.com`
+- **Staging**: `staging.southendpharmacystore.com`
 - **Prod**: `southendpharmacystore.com`
 
 ## Accessing Outputs
@@ -142,13 +142,13 @@ terraform output
 ```bash
 # View Cloud Run logs
 gcloud run services logs read sp-dev-cr-wordpress \
-  --project=southend-dev-pharmacy \
+  --project=allia-sp-dev \
   --region=us-central1
 
 # View Cloud SQL logs
 gcloud sql operations list \
   --instance=sp-dev-mysql \
-  --project=southend-dev-pharmacy
+  --project=allia-sp-dev
 ```
 
 ## Cost Estimates
@@ -160,7 +160,7 @@ gcloud sql operations list \
 - VPC Connector: ~$8/month
 - **Total**: ~$40-55/month
 
-### Test
+### Staging
 - Same as Development: ~$40-55/month
 
 ### Production
@@ -184,7 +184,7 @@ gcloud sql operations list \
 To destroy an environment:
 
 ```bash
-cd environments/dev  # or test/prod
+cd environments/dev  # or staging/prod
 terraform destroy
 ```
 

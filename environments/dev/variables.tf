@@ -5,7 +5,7 @@
 variable "project_id" {
   description = "Project id, references existing project if `project_create` is null."
   type        = string
-  default     = "southend-dev-pharmacy"
+  default     = "allia-sp-dev"
 }
 
 variable "region" {
@@ -84,5 +84,49 @@ variable "wordpress_port" {
   type        = number
   description = "Port for the Wordpress image"
   default     = 80
+}
+
+variable "smtp_host" {
+  type        = string
+  description = "SMTP server hostname"
+  default     = "smtp.gmail.com"
+}
+
+variable "smtp_port" {
+  type        = number
+  description = "SMTP server port"
+  default     = 587
+}
+
+variable "smtp_user" {
+  type        = string
+  description = "SMTP username/email"
+  default     = ""
+  sensitive   = true
+}
+
+variable "smtp_password" {
+  type        = string
+  description = "SMTP password or app password"
+  default     = ""
+  sensitive   = true
+}
+
+variable "smtp_from" {
+  type        = string
+  description = "From email address for WordPress emails"
+  default     = ""
+}
+
+variable "smtp_from_name" {
+  type        = string
+  description = "From name for WordPress emails"
+  default     = "Southend Pharmacy"
+}
+
+variable "smtp_secure" {
+  type        = string
+  description = "SMTP encryption: 'tls' or 'ssl'"
+  default     = "tls"
 }
 
